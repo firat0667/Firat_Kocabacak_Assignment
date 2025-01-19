@@ -8,6 +8,21 @@ public class PlayerMovement : NetworkBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float _speed = 5f; // Movement speed of the player
+    [SerializeField] private float _jumpForce = 5f; // Jump force
+    [SerializeField] private LayerMask _groundLayer; // Layer mask to detect ground
+
+    private Rigidbody _rigidbody;
+    private bool _isGrounded;
+
+    private void Awake()
+    {
+        // Ensure the player has a Rigidbody component
+        _rigidbody = GetComponent<Rigidbody>();
+        if (_rigidbody == null)
+        {
+            Debug.LogError("Rigidbody component is missing!");
+        }
+    }
 
     private void OnEnable()
     {
@@ -31,6 +46,7 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return; // Ensure only the owner can control this object
 
         HandleMovement();
+        HandleJump();
     }
 
     /// <summary>
@@ -43,6 +59,19 @@ public class PlayerMovement : NetworkBehaviour
 
         Vector3 movement = CalculateMovement(horizontal, vertical);
         ApplyMovement(movement);
+    }
+
+    /// <summary>
+    /// Handles player jump based on input and ground check.
+    /// </summary>
+    private void HandleJump()
+    {
+        _isGrounded = CheckGrounded();
+
+        if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+        }
     }
 
     /// <summary>
@@ -84,6 +113,15 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     /// <summary>
+    /// Checks if the player is on the ground.
+    /// </summary>
+    /// <returns>True if grounded, otherwise false.</returns>
+    private bool CheckGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 1.1f, _groundLayer);
+    }
+
+    /// <summary>
     /// Sets the player's movement speed.
     /// </summary>
     /// <param name="newSpeed">New movement speed value.</param>
@@ -99,5 +137,23 @@ public class PlayerMovement : NetworkBehaviour
     public float GetSpeed()
     {
         return _speed;
+    }
+
+    /// <summary>
+    /// Sets the player's jump force.
+    /// </summary>
+    /// <param name="newJumpForce">New jump force value.</param>
+    public void SetJumpForce(float newJumpForce)
+    {
+        _jumpForce = Mathf.Max(0, newJumpForce); // Ensure jump force is not negative
+    }
+
+    /// <summary>
+    /// Gets the current jump force.
+    /// </summary>
+    /// <returns>Current jump force.</returns>
+    public float GetJumpForce()
+    {
+        return _jumpForce;
     }
 }

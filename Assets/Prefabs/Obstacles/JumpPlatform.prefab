@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7064485812357699347}
   - component: {fileID: 1288576129776902943}
   - component: {fileID: 2924936327814201699}
-  m_Layer: 0
+  - component: {fileID: 5130838662045677660}
+  m_Layer: 7
   m_Name: JumpPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,6 +118,25 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &5130838662045677660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3628434345571468409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 182d1a58728f9c3418d4aa3d7e5b774c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  direction: 0
+  minPosition: -7.5
+  maxPosition: 7.5
+  speed: 2
+  minDelay: 1
+  maxDelay: 2
 --- !u!1 &4050846710534729070
 GameObject:
   m_ObjectHideFlags: 0

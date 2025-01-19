@@ -6,7 +6,7 @@ public class MovingPlatform : NetworkBehaviour
 {
     public enum MovementDirection
     {
-        Horizontal, // Movement along the X or Z axis
+        Horizontal, // Movement along the Z axis
         Vertical    // Movement along the Y axis
     }
 
@@ -41,11 +41,11 @@ public class MovingPlatform : NetworkBehaviour
         // Determine which axis to move along based on the direction
         if (direction == MovementDirection.Horizontal)
         {
-            MoveAlongAxis(ref currentPosition.z, minPosition, maxPosition);
+            MoveAlongAxis(ref currentPosition.x, minPosition, maxPosition); // Move along X axis for Horizontal
         }
         else if (direction == MovementDirection.Vertical)
         {
-            MoveAlongAxis(ref currentPosition.y, minPosition, maxPosition);
+            MoveAlongAxis(ref currentPosition.y, minPosition, maxPosition); // Move along Y axis for Vertical
         }
 
         // Update position and send to clients
@@ -102,8 +102,6 @@ public class MovingPlatform : NetworkBehaviour
     {
         UpdatePlatformPositionClientRpc(newPosition);
     }
-   
-
 
     /// <summary>
     /// Updates platform position on clients.
