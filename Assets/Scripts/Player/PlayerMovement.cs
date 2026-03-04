@@ -24,17 +24,16 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
-    private void OnEnable()
+    public override void OnNetworkSpawn()
     {
-        // Check if the SpawnManager is available and if GetRandomSpawnPoint() returns a valid spawn point
-        Transform spawnPoint = Singleton<SpawnManager>.Instance.GetRandomSpawnPoint();
+        if (!IsServer) return;
+
+        Transform spawnPoint = SpawnManager.Instance.GetRandomSpawnPoint();
+
         if (spawnPoint != null)
         {
             transform.position = spawnPoint.position;
-        }
-        else
-        {
-            Debug.LogError("Spawn point is invalid.");
+            transform.rotation = spawnPoint.rotation;
         }
     }
 

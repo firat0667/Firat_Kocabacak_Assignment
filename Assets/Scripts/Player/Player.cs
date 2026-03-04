@@ -1,22 +1,55 @@
+using TMPro;
+using Unity.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Player : AbstractPlayer
 {
-    /// <summary>
-    /// Method to initialize player-specific data
-    /// </summary>
+    [SerializeField] private TextMeshPro nameText;
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        playerName.OnValueChanged += OnNameChanged;
+
+        UpdateNameText();
+
+        InitializePlayer();
+    }
+
     public override void InitializePlayer()
     {
-        playerName = "Player" + Random.Range(1, 1000).ToString();
-        health = 100;  // Default health
+        health = 100;
+
+        if (IsOwner)
+        {
+            SetNameServerRpc(NetworkUI.PlayerName);
+        }
     }
-    /// <summary>
-    /// Method to spawn the player at a specific point
-    /// </summary>
-    /// <param name="spawnPoint"></param>
+
+    [ServerRpc]
+    void SetNameServerRpc(string name)
+    {
+        playerName.Value = name;
+    }
+
+    void OnNameChanged(FixedString64Bytes oldValue, FixedString64Bytes newValue)
+    {
+        UpdateNameText();
+    }
+
+    void UpdateNameText()
+    {
+        if (nameText != null)
+        {
+            nameText.text = playerName.Value.ToString();
+        }
+    }
+
     public override void SpawnAtPoint(Transform spawnPoint)
     {
-        transform.position = spawnPoint.position;  // Set position to spawn point
-        transform.rotation = spawnPoint.rotation;  // Set rotation to spawn point
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
     }
 }

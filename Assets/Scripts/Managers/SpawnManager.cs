@@ -3,29 +3,22 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    public static SpawnManager Instance;
 
-   [SerializeField] private List<Transform> _spawnPoints;  // List of spawn points
+    [SerializeField] private List<Transform> _spawnPoints;
 
-
-    /// <summary>
-    ///  Method to set spawn points externally
-    /// </summary>
-    /// <param name="points"></param>
-    public void SetSpawnPoints(List<Transform> points)
+    private void Awake()
     {
-        _spawnPoints = points;
+        Instance = this;
+        Debug.Log("SpawnManager initialized. SpawnPoints: " + _spawnPoints.Count);
     }
-    /// <summary>
-    /// Method to get a random spawn point
-    /// </summary>
-    /// <returns></returns>
+
     public Transform GetRandomSpawnPoint()
     {
-        // Null or empty check for spawn points
         if (_spawnPoints == null || _spawnPoints.Count == 0)
         {
             Debug.LogError("Spawn points are not set or empty.");
-            return null; // Return null if no spawn points are available
+            return null;
         }
 
         return _spawnPoints[Random.Range(0, _spawnPoints.Count)];

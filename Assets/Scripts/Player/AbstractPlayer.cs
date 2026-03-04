@@ -1,9 +1,14 @@
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 public abstract class AbstractPlayer : NetworkBehaviour
 {
-    public string playerName;  // Player's name
+    public NetworkVariable<FixedString64Bytes> playerName =
+     new NetworkVariable<FixedString64Bytes>(
+         "Player",
+         NetworkVariableReadPermission.Everyone,
+         NetworkVariableWritePermission.Server);
     public int health;  // Player's health
 
 

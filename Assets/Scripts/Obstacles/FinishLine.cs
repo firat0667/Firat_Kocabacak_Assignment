@@ -12,7 +12,7 @@ public class FinishLine : MonoBehaviour
         if (player != null)
         {
             // Call UIManager to display the winner's name
-            _uiManager.DisplayWinner(player.playerName);
+            _uiManager.DisplayWinner(player.playerName.Value.ToString());
         }
     }
 }

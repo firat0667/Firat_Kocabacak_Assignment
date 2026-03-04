@@ -25,7 +25,10 @@ public class MovingPlatform : NetworkBehaviour
 
     private void Update()
     {
-        if (IsServer && !isWaiting)
+        if (!NetworkManager.Singleton || !NetworkManager.Singleton.IsServer)
+            return;
+
+        if (!isWaiting)
         {
             MovePlatform();
         }
@@ -100,6 +103,9 @@ public class MovingPlatform : NetworkBehaviour
     /// <param name="newPosition">The new position of the platform.</param>
     private void SyncPositionWithClients(Vector3 newPosition)
     {
+        if (!NetworkManager.Singleton.IsListening)
+            return;
+
         UpdatePlatformPositionClientRpc(newPosition);
     }
 
